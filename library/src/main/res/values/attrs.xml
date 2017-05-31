@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="MaterialSearchView">
+    <attr name="hasOverflow" format="boolean"/>
+    <attr name="searchIconPositionFromRight" format="integer"/>
+    <attr name="searchBarHeight" format="dimension"/>
+    <attr name="cancelOnTouchOutside" format="boolean"/>
+    <attr name="noResultsFoundHint" format="string"/>
+    <attr name="animationTime" format="integer"/>
+  </declare-styleable>
+</resources>
