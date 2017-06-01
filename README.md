@@ -1,10 +1,11 @@
 # MaterialSearchView
 This is a library which wraps a `SearchView` to reveal itself in a circular fashion, just like in the PlayStore.
-[[https://github.com/Agraphie/MaterialSearchView/blob/master/art/example_1.gif|alt=Sample App]]
-[[https://github.com/Agraphie/MaterialSearchView/blob/master/art/example_2.gif|alt=Real World App]]
 
-At its core you can get a `RecyclerView` and attach your favourite adapter and get the `SearchView` to style it like 
-you prefer.
+![](/art/example_1.gif)
+![](/art/example_2.gif)
+
+At its core you can get a `RecyclerView` for the search results and attach your favourite adapter and get the 
+`SearchView` to style it like you prefer.
 
 # Usage
 
@@ -41,7 +42,6 @@ Simply include the class `MaterialSearchView` in your XML layout where you defin
 For showing the `SearchView` simple call `MaterialSearchView.show()` whenever you desire. E.g.
 
 ```Java
-@Override
 public class MainActivity extends AppCompatActivity {
 
   MaterialSearchView materialSearchView;
