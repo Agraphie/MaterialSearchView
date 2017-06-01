@@ -11,6 +11,7 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.os.Build;
 import android.support.annotation.Dimension;
+import android.support.annotation.Keep;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -23,23 +24,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ProgressBar;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 /**
  * Created by Clemens Keppler on 26.05.2017. Base class for the search toolbar. Use this class in your XML layout and
  * set the desired attributes. If you wish to change the contained TextView or progressbar, simply extend this class
  * and create your own view.
  */
-public class MaterialSearchView extends RelativeLayout {
+public class MaterialSearchView extends FrameLayout {
   private static final int DEFAULT_CIRCULAR_REVEAL_ANIMATION_DURATION = 250;
   private static final int HEIGHT_NOT_DEFINED = -1;
-  protected ProgressBar progress;
-  protected TextView noResultsFound;
+  private Animation addOverlayAnim = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
+  private View overlay;
+  private FrameLayout overlayContainer;
   private MenuItem menuItemSearch;
   private int animationDuration;
   private Toolbar toolbar;
@@ -57,24 +59,34 @@ public class MaterialSearchView extends RelativeLayout {
   private boolean clipOutlines;
   @Dimension private int searchbarHeight;
   @Dimension private int defaultActionBarHeight;
-  private String noResultsFoundHint;
   private Point displaySize;
+  private boolean animating;
   private Animator.AnimatorListener circleAnimShowListener = new AnimatorListenerAdapter() {
+    @Override public void onAnimationStart(Animator animation) {
+      animating = true;
+      super.onAnimationStart(animation);
+    }
+
     @Override
     public void onAnimationEnd(Animator animation) {
       super.onAnimationStart(animation);
       searchResultsContainer.setVisibility(VISIBLE);
       searchResultsContainer.startAnimation(slideDown);
+      showOverlay();
+      animating = false;
     }
   };
   private Animator.AnimatorListener circleAnimHideListener = new AnimatorListenerAdapter() {
     @Override
     public void onAnimationStart(Animator animation) {
+      animating = true;
       super.onAnimationStart(animation);
       searchResultsContainer.setVisibility(GONE);
+      removeOverlay();
     }
 
     @Override public void onAnimationEnd(Animator animation) {
+      animating = false;
       super.onAnimationEnd(animation);
       setVisibility(GONE);
       clipOutlines = false;
@@ -83,6 +95,7 @@ public class MaterialSearchView extends RelativeLayout {
   private int cy;
   private int cx;
   private int width;
+  private FrameLayout frameLayout;
 
   public MaterialSearchView(Context context) {
     super(context);
@@ -118,24 +131,43 @@ public class MaterialSearchView extends RelativeLayout {
   }
 
   public void show() {
+    ViewGroup parent = (ViewGroup) getParent();
+    parent.removeView(this);
+    overlayContainer.addView(this);
+    parent.addView(overlayContainer);
+    overlay.setVisibility(GONE);
     circularReveal();
     menuItemSearch.expandActionView();
   }
 
-  public void showProgress() {
-    progress.setVisibility(VISIBLE);
+  private void showOverlay() {
+    overlay.setVisibility(VISIBLE);
+    overlay.startAnimation(addOverlayAnim);
   }
 
-  public void hideProgress() {
-    progress.setVisibility(GONE);
+  private void removeOverlay() {
+    overlayContainer.removeView(this);
+    ViewGroup parent = (ViewGroup) overlayContainer.getParent();
+    if (parent != null) {
+      parent.removeView(overlayContainer);
+      parent.addView(this);
+    }
   }
 
-  public void showNoResultsFoundHint() {
-    noResultsFound.setVisibility(VISIBLE);
-  }
+  @Override protected void onAttachedToWindow() {
+    super.onAttachedToWindow();
+    if (cancelOnTouchOutside) {
+      overlay.setOnClickListener(new OnClickListener() {
+        @Override public void onClick(View v) {
+          if (!v.equals(MaterialSearchView.this) && getVisibility() == VISIBLE && !animating) {
+            slideDown.cancel();
+            addOverlayAnim.cancel();
+            hide();
+          }
+        }
+      });
+    }
 
-  public void hideNoResultsFoundHint() {
-    noResultsFound.setVisibility(GONE);
   }
 
   public SearchView getSearchView() {
@@ -147,7 +179,7 @@ public class MaterialSearchView extends RelativeLayout {
   }
 
 
-  private void setClipRadius(final float clipRadius) {
+  @Keep private void setClipRadius(final float clipRadius) {
     this.clipRadius = clipRadius;
     invalidate();
   }
@@ -204,8 +236,7 @@ public class MaterialSearchView extends RelativeLayout {
       hasOverflow = a.getBoolean(R.styleable.MaterialSearchView_hasOverflow, false);
       searchbarHeight = a.getDimensionPixelSize(R.styleable.MaterialSearchView_searchBarHeight, HEIGHT_NOT_DEFINED);
       cancelOnTouchOutside = a.getBoolean(R.styleable.MaterialSearchView_cancelOnTouchOutside, true);
-      noResultsFoundHint = a.getString(R.styleable.MaterialSearchView_noResultsFoundHint);
-      animationDuration = a.getInteger(R.styleable.MaterialSearchView_animationTime,
+      animationDuration = a.getInteger(R.styleable.MaterialSearchView_circularAnimationTime,
           DEFAULT_CIRCULAR_REVEAL_ANIMATION_DURATION);
     } finally {
       a.recycle();
@@ -233,9 +264,25 @@ public class MaterialSearchView extends RelativeLayout {
     }
     cx = displaySize.x - positionOffset - overflowOffset;
     cy = (defaultActionBarHeight / 2);
-    slideDown = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down);
+    slideDown = createSlideDownAnimation();
     revealPath = new Path();
     clipOutlines = false;
+  }
+
+  private Animation createSlideDownAnimation() {
+    Animation result = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down);
+    result.setAnimationListener(new Animation.AnimationListener() {
+      @Override public void onAnimationStart(Animation animation) {
+      }
+
+      @Override public void onAnimationEnd(Animation animation) {
+      }
+
+      @Override public void onAnimationRepeat(Animation animation) {
+
+      }
+    });
+    return result;
   }
 
   private void setUpViews() {
@@ -246,23 +293,12 @@ public class MaterialSearchView extends RelativeLayout {
       layoutParams.height = searchbarHeight;
       toolbar.setLayoutParams(layoutParams);
     }
-    RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.container);
-    if (cancelOnTouchOutside) {
-      relativeLayout.setOnClickListener(new OnClickListener() {
-        @Override public void onClick(View v) {
-          if (!v.equals(MaterialSearchView.this)) {
-            hide();
-          }
-        }
-      });
-    }
+
     searchResultsContainer = (CardView) findViewById(R.id.search_results_container);
-    progress = (ProgressBar) findViewById(R.id.progressBar);
-    noResultsFound = (TextView) findViewById(R.id.no_results_found);
-    if (noResultsFoundHint != null) {
-      noResultsFound.setText(noResultsFoundHint);
-    }
+    overlayContainer = (FrameLayout) inflate(getContext(), R.layout.overlay, null);
+    overlay = overlayContainer.findViewById(R.id.overlay);
   }
+
 
   private void setUpSearchToolbar() {
     toolbar.inflateMenu(R.menu.menu_search);
