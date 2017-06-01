@@ -30,6 +30,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 /**
  * Created by Clemens Keppler on 26.05.2017. Base class for the search toolbar. Use this class in your XML layout and
@@ -55,6 +56,7 @@ public class MaterialSearchView extends FrameLayout {
   private SearchView searchView;
   private RecyclerView searchResults;
   private Path revealPath;
+  private boolean hideOnKeyboardClose;
   private float clipRadius;
   private boolean clipOutlines;
   @Dimension private int searchbarHeight;
@@ -119,7 +121,7 @@ public class MaterialSearchView extends FrameLayout {
     super.onFinishInflate();
     setUpViews();
     setUpSearchToolbar();
-    width = toolbar.getWidth() - positionOffset - overflowOffset;
+    width = toolbar.getWidth();
     if (width <= 0) {
       width += displaySize.x - getPaddingLeft() - getPaddingRight();
     }
@@ -238,6 +240,7 @@ public class MaterialSearchView extends FrameLayout {
       cancelOnTouchOutside = a.getBoolean(R.styleable.MaterialSearchView_cancelOnTouchOutside, true);
       animationDuration = a.getInteger(R.styleable.MaterialSearchView_circularAnimationTime,
           DEFAULT_CIRCULAR_REVEAL_ANIMATION_DURATION);
+      hideOnKeyboardClose = a.getBoolean(R.styleable.MaterialSearchView_hideOnKeyboardClose, true);
     } finally {
       a.recycle();
     }
@@ -323,5 +326,15 @@ public class MaterialSearchView extends FrameLayout {
         return true;
       }
     });
+    if (hideOnKeyboardClose) {
+      TextView searchText = (TextView) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+      searchText.setOnFocusChangeListener(new OnFocusChangeListener() {
+        @Override public void onFocusChange(View v, boolean hasFocus) {
+          if (!hasFocus && getVisibility() == VISIBLE && !animating) {
+            hide();
+          }
+        }
+      });
+    }
   }
 }

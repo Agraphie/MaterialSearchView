@@ -6,5 +6,6 @@
     <attr name="searchBarHeight" format="dimension"/>
     <attr name="cancelOnTouchOutside" format="boolean"/>
     <attr name="circularAnimationTime" format="integer"/>
+    <attr name="hideOnKeyboardClose" format="boolean"/>
   </declare-styleable>
 </resources>
