@@ -93,3 +93,8 @@ Furthermore, you can define
  # Limitations
  On API 16 - 17 the circular reveal and hide animations do not look like a circle but like a square. Hopefully this 
  can be fixed in later releases somehow.
+ 
+ # Attributions
+ Thanks for Nathan Schwermann for his CircularReveal backport (https://gist.github.com/schwiz/e566f248723bb1754972) and Miguel Catalan Bañuls
+ for his original idea (https://github.com/MiguelCatalan/MaterialSearchView), as well as Ozodrukh for his circular 
+ reveal (https://github.com/ozodrukh/CircularReveal).
