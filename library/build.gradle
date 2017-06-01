@@ -1,4 +1,10 @@
+plugins {
+    id "com.jfrog.bintray" version "1.7"
+}
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+group = 'de.clemenskeppler'
+version = '1.0.0'
 
 android {
     compileSdkVersion 25
@@ -33,4 +39,34 @@ dependencies {
 
 
     testCompile 'junit:junit:4.12'
+}
+
+publishing {
+    publications {
+        MaterialSearchView(MavenPublication) {
+            groupId 'org.jfrog.example.gradle'
+            artifactId 'gradle-bintray-plugin-example'
+            version '1.0'
+        }
+    }
+}
+bintrayUpload.dependsOn 'assembleRelease'
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    publications = ['MaterialSearchView']
+    pkg {
+        repo = 'MaterialSearchView'
+        name = 'MaterialSearchView'
+        userOrg = user
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/Agraphie/MaterialSearchView.git'
+        labels = ['searchview', 'material-design', 'android']
+        publicDownloadNumbers = true
+        version {
+            name = version
+            released = new Date()
+            vcsTag = '1.0.0'
+        }
+    }
 }
