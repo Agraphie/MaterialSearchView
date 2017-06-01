@@ -17,6 +17,8 @@ allprojects {
         jcenter()
     }
 }
+group = 'de.clemenskeppler'
+version = '1.0.0'
 
 task clean(type: Delete) {
     delete rootProject.buildDir

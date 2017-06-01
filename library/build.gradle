@@ -3,8 +3,6 @@ plugins {
 }
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
-group = 'de.clemenskeppler'
-version = '1.0.0'
 
 android {
     compileSdkVersion 25
@@ -41,16 +39,42 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
+bintrayUpload.dependsOn 'assembleRelease'
+publish.dependsOn 'assembleRelease'
+
+android.libraryVariants
 publishing {
     publications {
         MaterialSearchView(MavenPublication) {
-            groupId 'org.jfrog.example.gradle'
-            artifactId 'gradle-bintray-plugin-example'
-            version '1.0'
+            // leaving out dependencies (components.java) intentionally
+            groupId "de.clemenskeppler"
+            artifactId "MaterialSearchView"
+            version rootProject.version
+            artifact getReleaseArtifact()
+            artifact sourcesJar
+        }
+    }
+
+    repositories {
+        maven {
+            credentials {
+                username = System.getenv('BINTRAY_USER')
+                password = System.getenv('BINTRAY_KEY')
+            }
+            url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
         }
     }
 }
-bintrayUpload.dependsOn 'assembleRelease'
+
+static def getReleaseArtifact() {
+    return "build/outputs/aar/library-release.aar"
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
 bintray {
     user = System.getenv('BINTRAY_USER')
     key = System.getenv('BINTRAY_KEY')
@@ -58,15 +82,20 @@ bintray {
     pkg {
         repo = 'MaterialSearchView'
         name = 'MaterialSearchView'
-        userOrg = user
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/Agraphie/MaterialSearchView.git'
+        issueTrackerUrl = 'https://github.com/Agraphie/MaterialSearchView/issues'
         labels = ['searchview', 'material-design', 'android']
+        description = 'A lightweight material search view'
         publicDownloadNumbers = true
         version {
-            name = version
+            name = rootProject.version
             released = new Date()
-            vcsTag = '1.0.0'
+            vcsTag = rootProject.version
+            gpg {
+                sign = true //Determines whether to GPG sign the files. The default is false
+                passphrase = System.getenv('BINTRAY_GPG')
+            }
         }
     }
 }
