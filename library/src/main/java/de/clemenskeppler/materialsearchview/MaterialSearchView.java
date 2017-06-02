@@ -134,10 +134,12 @@ public class MaterialSearchView extends FrameLayout {
 
   public void show() {
     ViewGroup parent = (ViewGroup) getParent();
-    parent.removeView(this);
-    overlayContainer.addView(this);
-    parent.addView(overlayContainer);
-    overlay.setVisibility(GONE);
+    if (parent != null) {
+      parent.removeView(this);
+      overlayContainer.addView(this);
+      parent.addView(overlayContainer);
+      overlay.setVisibility(GONE);
+    }
     circularReveal();
     menuItemSearch.expandActionView();
   }
