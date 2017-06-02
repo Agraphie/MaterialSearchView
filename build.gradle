@@ -19,7 +19,32 @@ allprojects {
 }
 group = 'de.clemenskeppler'
 version = '1.0.0'
+description = 'A lightweight material search view'
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+ext {
+    pomXml = {
+        name project.name
+        url 'https://github.com/Agraphie/MaterialSearchView'
+        scm {
+            url 'https://github.com/Agraphie/MaterialSearchView.git'
+            connection 'scm:git:git://github.com/Agraphie/MaterialSearchView.git'
+            developerConnection 'scm:git:git@github.com/Agraphie/MaterialSearchView.git'
+        }
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/license/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+        developers {
+            developer {
+                id 'agraphie'
+                name 'Clemens Keppler'
+            }
+        }
+    }
 }

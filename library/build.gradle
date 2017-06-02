@@ -27,16 +27,9 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile "com.android.support:recyclerview-v7:25.3.1"
     compile "com.android.support:cardview-v7:25.3.1"
-
-
-    testCompile 'junit:junit:4.12'
 }
 
 bintrayUpload.dependsOn 'assembleRelease'
@@ -46,12 +39,27 @@ android.libraryVariants
 publishing {
     publications {
         MaterialSearchView(MavenPublication) {
-            // leaving out dependencies (components.java) intentionally
             groupId "de.clemenskeppler"
             artifactId "MaterialSearchView"
             version rootProject.version
             artifact getReleaseArtifact()
             artifact sourcesJar
+            description = this.description
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
+
+                //Iterate over the compile dependencies (we don't want the test ones), adding a <dependency> node for each
+                configurations.compile.allDependencies.each {
+                    if (it.group != null) {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+                }
+                asNode().appendNode('description', rootProject.description)
+                asNode().children().last() + project.pomXml
+            }
         }
     }
 
@@ -59,9 +67,9 @@ publishing {
         maven {
             credentials {
                 username = System.getenv('BINTRAY_USER')
-                password = System.getenv('BINTRAY_KEY')
+                password = System.getenv('SONATYPE_KEY')
             }
-            url 'http://oss.jfrog.org/artifactory/oss-snapshot-local'
+            url 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
         }
     }
 }
@@ -86,7 +94,7 @@ bintray {
         vcsUrl = 'https://github.com/Agraphie/MaterialSearchView.git'
         issueTrackerUrl = 'https://github.com/Agraphie/MaterialSearchView/issues'
         labels = ['searchview', 'material-design', 'android']
-        description = 'A lightweight material search view'
+        description = rootProject.description
         publicDownloadNumbers = true
         version {
             name = rootProject.version
