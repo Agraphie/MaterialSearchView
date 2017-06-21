@@ -12,7 +12,6 @@ import android.graphics.Point;
 import android.os.Build;
 import android.support.annotation.Dimension;
 import android.support.annotation.Keep;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -20,8 +19,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Display;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
@@ -43,7 +40,6 @@ public class MaterialSearchView extends FrameLayout {
   private Animation addOverlayAnim = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
   private View overlay;
   private FrameLayout overlayContainer;
-  private MenuItem menuItemSearch;
   private int animationDuration;
   private Toolbar toolbar;
   private CardView searchResultsContainer;
@@ -129,7 +125,6 @@ public class MaterialSearchView extends FrameLayout {
 
   public void hide() {
     circularHide();
-    menuItemSearch.collapseActionView();
   }
 
   public void show() {
@@ -141,7 +136,6 @@ public class MaterialSearchView extends FrameLayout {
       overlay.setVisibility(GONE);
     }
     circularReveal();
-    menuItemSearch.expandActionView();
   }
 
   private void showOverlay() {
@@ -302,32 +296,12 @@ public class MaterialSearchView extends FrameLayout {
     searchResultsContainer = (CardView) findViewById(R.id.search_results_container);
     overlayContainer = (FrameLayout) inflate(getContext(), R.layout.overlay, null);
     overlay = overlayContainer.findViewById(R.id.overlay);
+    searchView = (SearchView) findViewById(R.id.searchView);
   }
 
 
   private void setUpSearchToolbar() {
-    toolbar.inflateMenu(R.menu.menu_search);
-    Menu searchMenu = toolbar.getMenu();
-
-    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        circularHide();
-      }
-    });
-
-    menuItemSearch = searchMenu.findItem(R.id.action_filter_search);
-    searchView = (SearchView) menuItemSearch.getActionView();
-    MenuItemCompat.setOnActionExpandListener(menuItemSearch, new MenuItemCompat.OnActionExpandListener() {
-      @Override public boolean onMenuItemActionCollapse(MenuItem item) {
-        circularHide();
-        return true;
-      }
-
-      @Override public boolean onMenuItemActionExpand(MenuItem item) {
-        return true;
-      }
-    });
+    searchView.setIconified(false);
     if (hideOnKeyboardClose) {
       TextView searchText = (TextView) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
       searchText.setOnFocusChangeListener(new OnFocusChangeListener() {
