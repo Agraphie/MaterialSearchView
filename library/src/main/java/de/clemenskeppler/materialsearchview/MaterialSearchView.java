@@ -132,6 +132,9 @@ public class MaterialSearchView extends FrameLayout {
     if (parent != null) {
       parent.removeView(this);
       overlayContainer.addView(this);
+      if (overlayContainer.getParent() != null) {
+        ((ViewGroup) overlayContainer.getParent()).removeView(overlayContainer);
+      }
       parent.addView(overlayContainer);
       overlay.setVisibility(GONE);
     }
