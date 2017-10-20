@@ -29,6 +29,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -59,6 +60,7 @@ public class MaterialSearchView extends FrameLayout {
   private float clipRadius;
   private boolean clipOutlines;
   private MenuItem menuItemSearch;
+  private ProgressBar progress;
   @Dimension private int searchbarHeight;
   @Dimension private int defaultActionBarHeight;
   private Point displaySize;
@@ -145,6 +147,14 @@ public class MaterialSearchView extends FrameLayout {
     }
     circularReveal();
     menuItemSearch.expandActionView();
+  }
+
+  public void showProgress() {
+    progress.setVisibility(VISIBLE);
+  }
+
+  public void hideProgress() {
+    progress.setVisibility(GONE);
   }
 
   private void showOverlay() {
@@ -294,17 +304,18 @@ public class MaterialSearchView extends FrameLayout {
   }
 
   private void setUpViews() {
-    toolbar = (Toolbar) findViewById(R.id.search_toolbar);
-    searchResults = (RecyclerView) findViewById(R.id.search_results);
+    toolbar = findViewById(R.id.search_toolbar);
+    searchResults = findViewById(R.id.search_results);
     if (searchbarHeight != HEIGHT_NOT_DEFINED) {
       RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
       layoutParams.height = searchbarHeight;
       toolbar.setLayoutParams(layoutParams);
     }
 
-    searchResultsContainer = (CardView) findViewById(R.id.search_results_container);
+    searchResultsContainer = findViewById(R.id.search_results_container);
     overlayContainer = (FrameLayout) inflate(getContext(), R.layout.overlay, null);
     overlay = overlayContainer.findViewById(R.id.overlay);
+    progress = findViewById(R.id.progress);
   }
 
 
@@ -332,7 +343,7 @@ public class MaterialSearchView extends FrameLayout {
       }
     });
     if (hideOnKeyboardClose) {
-      TextView searchText = (TextView) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+      TextView searchText = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
       searchText.setOnFocusChangeListener(new OnFocusChangeListener() {
         @Override public void onFocusChange(View v, boolean hasFocus) {
           if (!hasFocus && getVisibility() == VISIBLE && !animating) {
