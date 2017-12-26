@@ -10,7 +10,7 @@ At its core you can get a `RecyclerView` for the search results and attach your 
 # Usage
 First include the dependency in your build.gradle
 ```
-compile 'de.clemenskeppler:MaterialSearchView:1.0.0'
+compile 'de.clemenskeppler:MaterialSearchView:1.0.3'
 ```
 
 Simply include the class `MaterialSearchView` in your XML layout where you define your toolbar.
