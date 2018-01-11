@@ -23,6 +23,10 @@ allprojects {
     }
 }
 
+group = 'de.clemenskeppler'
+version = '1.0.4'
+description = 'A lightweight material search view'
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

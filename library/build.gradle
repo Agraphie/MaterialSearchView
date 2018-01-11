@@ -12,7 +12,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 5
-        versionName "1.0.4"
+        versionName rootProject.version
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -31,19 +31,21 @@ dependencies {
     implementation "com.android.support:cardview-v7:26.1.0"
 }
 
-bintrayUpload.dependsOn 'assembleRelease'
-publish.dependsOn 'assembleRelease'
+afterEvaluate {
+    bintrayUpload.dependsOn 'assembleRelease'
+    publish.dependsOn 'assembleRelease'
+}
 
 android.libraryVariants
 publishing {
     publications {
         MaterialSearchView(MavenPublication) {
-            groupId "de.clemenskeppler"
-            artifactId "MaterialSearchView"
-            version rootProject.version
+            groupId = rootProject.group
+            artifactId = "MaterialSearchView"
+            version = rootProject.version
             artifact getReleaseArtifact()
             artifact sourcesJar
-            description = this.description
+            description = rootProject.description
             pom.withXml {
                 def dependenciesNode = asNode().appendNode('dependencies')
 
@@ -56,7 +58,7 @@ publishing {
                         dependencyNode.appendNode('version', it.version)
                     }
                 }
-                asNode().appendNode('description', rootProject.description)
+                asNode().appendNode('description', description)
                 asNode().children().last() + project.pomXml
             }
         }
