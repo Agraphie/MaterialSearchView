@@ -99,11 +99,11 @@ public class MaterialSearchView extends FrameLayout {
   private int cy;
   private int cx;
   private int width;
-  private FrameLayout frameLayout;
 
   public MaterialSearchView(Context context) {
     super(context);
     positionFromRight = 1;
+    init(context, null);
     inflate(context, R.layout.search_toolbar, this);
   }
 
@@ -119,7 +119,7 @@ public class MaterialSearchView extends FrameLayout {
     inflate(context, R.layout.search_toolbar, this);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override public void onFinishInflate() {
     super.onFinishInflate();
     setUpViews();
     setUpSearchToolbar();
@@ -246,18 +246,20 @@ public class MaterialSearchView extends FrameLayout {
   private void init(Context context, AttributeSet attrs) {
     setWillNotDraw(false);
 
-    TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.MaterialSearchView, 0, 0);
+    if (attrs != null) {
+      TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.MaterialSearchView, 0, 0);
 
-    try {
-      positionFromRight = a.getInt(R.styleable.MaterialSearchView_searchIconPositionFromRight, 0);
-      hasOverflow = a.getBoolean(R.styleable.MaterialSearchView_hasOverflow, false);
-      searchbarHeight = a.getDimensionPixelSize(R.styleable.MaterialSearchView_searchBarHeight, HEIGHT_NOT_DEFINED);
-      cancelOnTouchOutside = a.getBoolean(R.styleable.MaterialSearchView_cancelOnTouchOutside, true);
-      animationDuration = a.getInteger(R.styleable.MaterialSearchView_circularAnimationTime,
-          DEFAULT_CIRCULAR_REVEAL_ANIMATION_DURATION);
-      hideOnKeyboardClose = a.getBoolean(R.styleable.MaterialSearchView_hideOnKeyboardClose, true);
-    } finally {
-      a.recycle();
+      try {
+        positionFromRight = a.getInt(R.styleable.MaterialSearchView_searchIconPositionFromRight, 0);
+        hasOverflow = a.getBoolean(R.styleable.MaterialSearchView_hasOverflow, false);
+        searchbarHeight = a.getDimensionPixelSize(R.styleable.MaterialSearchView_searchBarHeight, HEIGHT_NOT_DEFINED);
+        cancelOnTouchOutside = a.getBoolean(R.styleable.MaterialSearchView_cancelOnTouchOutside, true);
+        animationDuration = a.getInteger(R.styleable.MaterialSearchView_circularAnimationTime,
+            DEFAULT_CIRCULAR_REVEAL_ANIMATION_DURATION);
+        hideOnKeyboardClose = a.getBoolean(R.styleable.MaterialSearchView_hideOnKeyboardClose, true);
+      } finally {
+        a.recycle();
+      }
     }
     Display display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
     displaySize = new Point();
@@ -304,8 +306,8 @@ public class MaterialSearchView extends FrameLayout {
   }
 
   private void setUpViews() {
-    toolbar = findViewById(R.id.search_toolbar);
-    searchResults = findViewById(R.id.search_results);
+    toolbar = findViewById(R.id.material_search_view_search_toolbar);
+    searchResults = findViewById(R.id.material_search_view_search_results);
     if (searchbarHeight != HEIGHT_NOT_DEFINED) {
       RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
       layoutParams.height = searchbarHeight;
@@ -314,8 +316,8 @@ public class MaterialSearchView extends FrameLayout {
 
     searchResultsContainer = findViewById(R.id.search_results_container);
     overlayContainer = (FrameLayout) inflate(getContext(), R.layout.overlay, null);
-    overlay = overlayContainer.findViewById(R.id.overlay);
-    progress = findViewById(R.id.progress);
+    overlay = overlayContainer.findViewById(R.id.material_search_view_overlay);
+    progress = findViewById(R.id.material_search_view_progress);
   }
 
 

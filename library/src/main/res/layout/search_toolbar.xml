@@ -2,12 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/container"
+                android:id="@+id/material_search_view_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
   <android.support.v7.widget.Toolbar
-    android:id="@+id/search_toolbar"
+    android:id="@+id/material_search_view_search_toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:layout_alignParentTop="true"
@@ -18,13 +18,13 @@
     android:id="@+id/search_results_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_below="@+id/search_toolbar"
+    android:layout_below="@+id/material_search_view_search_toolbar"
     android:visibility="gone"
     tools:visibility="visible">
 
 
     <ProgressBar
-      android:id="@+id/progress"
+      android:id="@+id/material_search_view_progress"
       style="?android:attr/progressBarStyleSmall"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
       android:visibility="gone"/>
 
     <android.support.v7.widget.RecyclerView
-      android:id="@+id/search_results"
+      android:id="@+id/material_search_view_search_results"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"/>
 
