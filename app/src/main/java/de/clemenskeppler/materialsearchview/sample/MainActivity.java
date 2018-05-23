@@ -25,9 +25,9 @@ public class MainActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-    materialSearchView = (MaterialSearchView) findViewById(R.id.materialSearchView);
+    materialSearchView = findViewById(R.id.materialSearchView);
     searchView = materialSearchView.getSearchView();
     results = materialSearchView.getSearchResults();
     ArrayList<String> previousSearches = new ArrayList<>(3);
@@ -59,6 +59,14 @@ public class MainActivity extends AppCompatActivity {
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     if (item.getItemId() == R.id.action_filter_search) {
+      materialSearchView.show();
+      materialSearchView.show();
+      materialSearchView.show();
+      materialSearchView.show();
+      materialSearchView.show();
+      materialSearchView.show();
+      materialSearchView.show();
+      materialSearchView.show();
       materialSearchView.show();
       return true;
     } else {
