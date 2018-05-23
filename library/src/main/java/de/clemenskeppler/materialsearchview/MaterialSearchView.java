@@ -135,18 +135,20 @@ public class MaterialSearchView extends FrameLayout {
   }
 
   public void show() {
-    ViewGroup parent = (ViewGroup) getParent();
-    if (parent != null) {
-      parent.removeView(this);
-      overlayContainer.addView(this);
-      if (overlayContainer.getParent() != null) {
-        ((ViewGroup) overlayContainer.getParent()).removeView(overlayContainer);
+    if (!isShown()) {
+      ViewGroup parent = (ViewGroup) getParent();
+      if (parent != null) {
+        parent.removeView(this);
+        overlayContainer.addView(this);
+        if (overlayContainer.getParent() != null) {
+          ((ViewGroup) overlayContainer.getParent()).removeView(overlayContainer);
+        }
+        parent.addView(overlayContainer);
+        overlay.setVisibility(GONE);
       }
-      parent.addView(overlayContainer);
-      overlay.setVisibility(GONE);
+      circularReveal();
+      menuItemSearch.expandActionView();
     }
-    circularReveal();
-    menuItemSearch.expandActionView();
   }
 
   public void showProgress() {
