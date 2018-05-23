@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="material_search_view_search_container_border_thickness">0.5dp</dimen>
+  <dimen name="material_search_view_search_container_border_radius">1dp</dimen>
+
+</resources>

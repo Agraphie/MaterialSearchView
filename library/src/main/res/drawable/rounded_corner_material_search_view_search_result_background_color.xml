@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+  <stroke
+    android:width="@dimen/material_search_view_search_container_border_thickness"
+    android:color="@color/material_search_view_search_container_border_color"/>
+  <solid android:color="@color/material_search_view_search_container_background_color"/>
+  <corners android:radius="@dimen/material_search_view_search_container_border_radius"/>
+</shape>

@@ -13,7 +13,6 @@ import android.os.Build;
 import android.support.annotation.Dimension;
 import android.support.annotation.Keep;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -46,7 +45,7 @@ public class MaterialSearchView extends FrameLayout {
   private FrameLayout overlayContainer;
   private int animationDuration;
   private Toolbar toolbar;
-  private CardView searchResultsContainer;
+  private FrameLayout searchResultsContainer;
   private int positionFromRight;
   private boolean hasOverflow;
   private int positionOffset;

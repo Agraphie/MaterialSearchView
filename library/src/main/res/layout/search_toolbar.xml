@@ -9,16 +9,17 @@
   <android.support.v7.widget.Toolbar
     android:id="@+id/material_search_view_search_toolbar"
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
+    android:layout_height="?android:attr/actionBarSize"
     android:layout_alignParentTop="true"
     android:background="#fff"
     app:collapseIcon="@drawable/ic_arrow_back_black_24dp"/>
 
-  <android.support.v7.widget.CardView
+  <FrameLayout
     android:id="@+id/search_results_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@+id/material_search_view_search_toolbar"
+    android:background="@drawable/rounded_corner_material_search_view_search_result_background_color"
     android:visibility="gone"
     tools:visibility="visible">
 
@@ -38,7 +39,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"/>
 
-  </android.support.v7.widget.CardView>
+  </FrameLayout>
 
 </RelativeLayout>
 
