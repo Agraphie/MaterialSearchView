@@ -6,7 +6,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-  <android.support.v7.widget.Toolbar
+  <androidx.appcompat.widget.Toolbar
     android:id="@+id/material_search_view_search_toolbar"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/actionBarSize"
@@ -34,7 +34,7 @@
       android:layout_marginTop="5dp"
       android:visibility="gone"/>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/material_search_view_search_results"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"/>

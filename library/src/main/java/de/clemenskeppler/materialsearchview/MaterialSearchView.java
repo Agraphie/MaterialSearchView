@@ -10,12 +10,6 @@ import android.graphics.Canvas;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.os.Build;
-import android.support.annotation.Dimension;
-import android.support.annotation.Keep;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Display;
@@ -31,6 +25,13 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Dimension;
+import androidx.annotation.Keep;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Clemens Keppler on 26.05.2017. Base class for the search toolbar. Use this class in your XML layout and
@@ -346,7 +347,7 @@ public class MaterialSearchView extends FrameLayout {
       }
     });
     if (hideOnKeyboardClose) {
-      TextView searchText = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+      TextView searchText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
       searchText.setOnFocusChangeListener(new OnFocusChangeListener() {
         @Override public void onFocusChange(View v, boolean hasFocus) {
           if (!hasFocus && getVisibility() == VISIBLE && !animating) {

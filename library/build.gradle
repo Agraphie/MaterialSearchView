@@ -5,16 +5,16 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 6
         versionName rootProject.version
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
     buildTypes {
@@ -26,8 +26,8 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation "com.android.support:recyclerview-v7:27.1.1"
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
 }
 
 afterEvaluate {
@@ -42,8 +42,10 @@ publishing {
             groupId = rootProject.group
             artifactId = "MaterialSearchView"
             version = rootProject.version
-            artifact getReleaseArtifact()
-            artifact sourcesJar
+            afterEvaluate {
+                artifact sourcesJar
+                artifact getReleaseArtifact()
+            }
             description = rootProject.description
             pom.withXml {
                 def dependenciesNode = asNode().appendNode('dependencies')

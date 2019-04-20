@@ -1,14 +1,15 @@
 package de.clemenskeppler.materialsearchview.sample;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Clemens Keppler on 31.05.2017.
@@ -47,7 +48,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchHold
 
     SearchHolder(View itemView) {
       super(itemView);
-      result = (TextView) itemView.findViewById(R.id.result);
+      result = itemView.findViewById(R.id.result);
     }
   }
 }
